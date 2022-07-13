@@ -1,0 +1,27 @@
+[flake8]
+show-source = True
+statistics = False
+doctests = True
+
+# Plugins:
+accept-encodings = utf-8
+max-complexity = 6
+max-line-length = 120
+use_class_attributes_order_strict_mode = True
+max_function_length = 50
+max-cognitive-complexity = 8
+max-annotations-complexity = 4
+
+# Excluding some directories:
+exclude =
+  .git
+  __pycache__
+  .venv
+  .eggs
+  *.egg
+  dist
+
+# Self settings:
+max-imports = 15
+
+ignore = D100, D104, D106, D401, X100, W504, RST303, RST304, DAR103, DAR203
