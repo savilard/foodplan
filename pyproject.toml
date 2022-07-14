@@ -6,6 +6,7 @@ authors = ["savilard <vitaliyantonoff@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+Django = "3.2.14"
 
 [tool.poetry.dev-dependencies]
 wemake-python-styleguide = "^0.16.1"
