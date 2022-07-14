@@ -1,12 +1,8 @@
 from split_settings.tools import include
 
-from .environs import env
-
-SECRET_KEY = env('SECRET_KEY')
-DEBUG = env('DEBUG', cast=bool, default=False)
-
 _base_settings = (
     './auth.py',
+    './base.py',
     './boilerplate.py',
     './db.py',
     './environs.py',

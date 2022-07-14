@@ -20,8 +20,13 @@ exclude =
   .eggs
   *.egg
   dist
+  backend/manage.py
 
 # Self settings:
 max-imports = 15
 
 ignore = D100, D104, D106, D401, X100, W504, RST303, RST304, DAR103, DAR203
+
+per-file-ignores =
+  # Allow `__init__.py` with logic for configuration:
+  backend/config/settings/*.py: WPS226, WPS407, WPS412, WPS432

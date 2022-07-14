@@ -1,4 +1,4 @@
-from .environs import env
+from config.settings import env
 
 STATIC_URL = '/static/'
 STATIC_ROOT = env('STATIC_ROOT', cast=str, default='static')
