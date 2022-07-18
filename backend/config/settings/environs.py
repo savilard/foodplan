@@ -1,4 +1,4 @@
-import environ
+from environs import Env
 
-env = environ.Env()
-environ.Env.read_env('backend/.env')
+env = Env()
+env.read_env()
