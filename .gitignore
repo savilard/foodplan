@@ -147,11 +147,5 @@ cython_debug/
 #Jupyter Notebook files
 *.ipynb
 
-#Frontend bundles
-/frontend/dvmn-mentors/bundles/
-
-#Kubernetes cluster management
-/k8sroles
-*configmap.yaml
-poetry.lock
 .python-version
+backend/static
