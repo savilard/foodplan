@@ -19,6 +19,12 @@ services:
       DEBUG: ${DEBUG-TRUE}
       DATABASE_URL: ${DATABASE_URL-postgres://app_dev:OwOtBdfep9Frut@db:5432/app_dev}
       ALLOWED_HOSTS: ${ALLOWED_HOSTS-127.0.0.1,localhost}
+    healthcheck:
+      test: curl --fail http://localhost:8000 || exit 1
+      interval: 10s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
 
   db:
     image: postgres:14.4-alpine
