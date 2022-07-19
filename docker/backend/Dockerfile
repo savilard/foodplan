@@ -60,4 +60,6 @@ COPY --from=base /usr/local/bin/tini /usr/local/bin/tini
 COPY --from=base /usr/local/bin/dockerize /usr/local/bin/dockerize
 COPY ./backend ${APP_ROOT}
 
+RUN SECRET_KEY=empty python manage.py collectstatic --noinput
+
 ENTRYPOINT ["tini", "--", "/wait_db.sh"]
