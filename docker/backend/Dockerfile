@@ -17,6 +17,9 @@ ENV DOCKERIZE_VERSION=v0.6.1 \
 
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
+# System deps (we don't use exact versions because it is hard to update them,
+# pin when needed):
+# hadolint ignore=DL3008
 RUN <<EOF
   apt-get update
   apt-get install --no-install-recommends -y git build-essential gettext libpq-dev curl
@@ -31,6 +34,7 @@ RUN <<EOF
   python -m venv ${VIRTUAL_ENV}
 EOF
 
+WORKDIR /
 COPY pyproject.toml poetry.lock ./
 RUN poetry export --without-hashes -o requirements.txt
 RUN --mount=type=cache,target=/root/.cache/pip ${VIRTUAL_ENV}/bin/pip install -r requirements.txt
@@ -54,7 +58,7 @@ ENV PYTHONFAULTHANDLER=1 \
 RUN <<EOF
   useradd --create-home --uid=${APP_USER_UID} ${APP_USER}
   mkdir -p ${VIRTUAL_ENV}
-  chown ${APP_USER}:${APP_USER} ${VIRTUAL_ENV} \
+  chown ${APP_USER}:${APP_USER} ${VIRTUAL_ENV}
 EOF
 
 WORKDIR ${APP_ROOT}
