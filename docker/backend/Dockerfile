@@ -40,6 +40,8 @@ RUN --mount=type=cache,target=/root/.cache/pip ${VIRTUAL_ENV}/bin/pip install -r
 FROM python:${PYTHON_VERSION}-slim-bullseye AS final
 
 ARG APP_ROOT=/opt/app
+ARG APP_USER=appuser
+ARG APP_USER_UID=1000
 
 ENV VIRTUAL_ENV=/opt/venv
 ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
@@ -49,17 +51,23 @@ ENV PYTHONFAULTHANDLER=1 \
     PYTHONHASHSEED=random \
     PYTHONDONTWRITEBYTECODE=1
 
-RUN mkdir -p ${VIRTUAL_ENV}
+RUN <<EOF
+  useradd --create-home --uid=${APP_USER_UID} ${APP_USER}
+  mkdir -p ${VIRTUAL_ENV}
+  chown ${APP_USER}:${APP_USER} ${VIRTUAL_ENV} \
+EOF
+
 WORKDIR ${APP_ROOT}
 
 COPY ./docker/backend/wait_db.sh /wait_db.sh
 RUN chmod +x '/wait_db.sh'
 
-COPY --from=base ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-COPY --from=base /usr/local/bin/tini /usr/local/bin/tini
-COPY --from=base /usr/local/bin/dockerize /usr/local/bin/dockerize
-COPY ./backend ${APP_ROOT}
+COPY --from=base --chown=${APP_USER}:${APP_USER} ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+COPY --from=base --chown=${APP_USER}:${APP_USER} /usr/local/bin/tini /usr/local/bin/tini
+COPY --from=base --chown=${APP_USER}:${APP_USER} /usr/local/bin/dockerize /usr/local/bin/dockerize
+COPY --chown=${APP_USER}:${APP_USER} ./backend ${APP_ROOT}
 
 RUN SECRET_KEY=empty python manage.py collectstatic --noinput
+USER ${APP_USER}
 
 ENTRYPOINT ["tini", "--", "/wait_db.sh"]
