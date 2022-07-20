@@ -6,7 +6,7 @@ services:
     restart: always
     build:
         context: .
-        dockerfile: ./docker/backend/Dockerfile
+        dockerfile: ./backend/docker/django/Dockerfile
         args:
           - APP_ENV=dev
     command: python manage.py runserver 0.0.0.0:8000

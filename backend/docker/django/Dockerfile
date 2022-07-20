@@ -81,7 +81,7 @@ WORKDIR ${APP_ROOT}
 
 FROM base AS dev
 
-COPY ./docker/backend/wait_db.sh /wait_db.sh
+COPY ./backend/docker/django/wait_db.sh /wait_db.sh
 RUN chmod +x '/wait_db.sh'
 
 COPY --from=builder --chown=${APP_USER}:${APP_USER} ${VIRTUAL_ENV} ${VIRTUAL_ENV}
