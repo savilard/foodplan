@@ -9,7 +9,9 @@ DJANGO_APPS: Tuple[str, ...] = (
     'django.contrib.admin',
 )
 
-THIRD_PARTY_APPS: Tuple[str, ...] = ()
+THIRD_PARTY_APPS: Tuple[str, ...] = (
+    'rest_framework',
+)
 
 LOCAL_APPS: Tuple[str, ...] = ()
 
