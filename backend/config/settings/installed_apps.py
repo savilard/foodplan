@@ -14,6 +14,8 @@ THIRD_PARTY_APPS: Tuple[str, ...] = (
     'rest_framework',
 )
 
-LOCAL_APPS: Tuple[str, ...] = ()
+LOCAL_APPS: Tuple[str, ...] = (
+    'apps.users',
+)
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
