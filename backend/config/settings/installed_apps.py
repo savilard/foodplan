@@ -12,6 +12,8 @@ DJANGO_APPS: Tuple[str, ...] = (
 THIRD_PARTY_APPS: Tuple[str, ...] = (
     'behaviors.apps.BehaviorsConfig',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
 )
 
 LOCAL_APPS: Tuple[str, ...] = (
