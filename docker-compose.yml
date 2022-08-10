@@ -28,6 +28,14 @@ services:
       start_period: 10s
       retries: 3
 
+  frontend:
+    image: app_frontend
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    volumes:
+      - ./frontend:/app/result_build/
+
   db:
     image: postgres:14.4-alpine
     container_name: app-db
