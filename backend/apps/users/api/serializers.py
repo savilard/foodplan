@@ -4,6 +4,7 @@ from apps.users.models import CustomUser
 
 
 class CustomUserCreateSerializer(UserCreateSerializer):
+    """Model serializer for creating custom user by djoser."""
 
     class Meta:
         model = CustomUser
