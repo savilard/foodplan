@@ -237,6 +237,18 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "django-debug-toolbar"
+version = "3.6.0"
+description = "A configurable set of panels that display various debug information about the current request/response."
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+Django = ">=3.2.4"
+sqlparse = ">=0.2.0"
+
+[[package]]
 name = "django-extensions"
 version = "3.2.0"
 description = "Extensions for Django"
@@ -1107,7 +1119,7 @@ typing_extensions = ">=3.6,<5.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "655735f37eea6e7bc5442047f51c9c24a60199b21d231ac35d8261b7e0bc6ef1"
+content-hash = "f8d205b08fa25a1f914e37cc0bb43a6cde1be7b6c53ac229ebf826c1579f780d"
 
 [metadata.files]
 asgiref = [
@@ -1257,6 +1269,10 @@ dj-database-url = [
 ]
 django = []
 django-behaviors = []
+django-debug-toolbar = [
+    {file = "django-debug-toolbar-3.6.0.tar.gz", hash = "sha256:95fc2fd29c56cc86678aae9f6919ececefe892f2a78c4004b193a223a8380c3d"},
+    {file = "django_debug_toolbar-3.6.0-py3-none-any.whl", hash = "sha256:fe7fe3f21865218827e2162ecc06eba386dfe8cffe4f3501c49bb4359e06a0e6"},
+]
 django-extensions = []
 django-split-settings = [
     {file = "django-split-settings-1.1.0.tar.gz", hash = "sha256:6b3aed89667a95525152026eab93a9f038ff22df6883006318b8b4a3d0ca6888"},

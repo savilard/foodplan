@@ -5,6 +5,7 @@ _base_settings = (
     './auth.py',
     './base.py',
     './boilerplate.py',
+    './debug_toolbar.py',
     './db.py',
     './environs.py',
     './i18n.py',
