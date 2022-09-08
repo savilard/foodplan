@@ -36,3 +36,6 @@ per-file-ignores =
   apps/*/admin.py: D101, WPS226
   apps/*/forms.py: D101, WPS306, D101
   apps/*/api/serializers.py: WPS306
+  tests/*/*/*.py: S101
+  tests/*/*.py: S101
+  tests/factories/*.py: WPS306, D102
