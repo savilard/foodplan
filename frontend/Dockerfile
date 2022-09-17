@@ -4,4 +4,3 @@ COPY ./frontend/package*.json /app/
 RUN npm install
 COPY ./frontend /app
 RUN npm run build
-CMD cp -r build result_build
