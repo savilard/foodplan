@@ -1,11 +1,10 @@
 from django.db import models
-from django.db.models import functions
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import TimestampedModelWithUUID
 
-models.CharField.register_lookup(functions.Length, 'len')
+models.CharField.register_lookup(models.functions.Length, 'len')
 
 
 class Tag(TimestampedModelWithUUID):
