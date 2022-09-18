@@ -20,6 +20,7 @@ THIRD_PARTY_APPS: Tuple[str, ...] = (
 LOCAL_APPS: Tuple[str, ...] = (
     'apps.core',
     'apps.users',
+    'apps.tags',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
