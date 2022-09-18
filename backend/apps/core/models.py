@@ -14,7 +14,7 @@ class DefaultModel(models.Model):
         abstract = True
 
 
-class TimestampedModel(DefaultModel, Timestamped):
+class TimestampedModelWithUUID(DefaultModel, Timestamped):
     """
     Default app model that has `created` and `updated` attributes.
 

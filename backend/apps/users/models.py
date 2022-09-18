@@ -1,9 +1,9 @@
 from django.contrib.auth.models import AbstractUser
 
-from apps.core.models import TimestampedModel
+from apps.core.models import TimestampedModelWithUUID
 
 
-class CustomUser(AbstractUser, TimestampedModel):
+class CustomUser(AbstractUser, TimestampedModelWithUUID):
     """Custom user model."""
 
     pass
