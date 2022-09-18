@@ -31,8 +31,8 @@ class Tag(TimestampedModelWithUUID):
     )
 
     class Meta:
-        verbose_name = 'Тег'
-        verbose_name_plural = 'Теги'
+        verbose_name = _('Tag')
+        verbose_name_plural = _('Tags')
         constraints = (
             models.UniqueConstraint(
                 fields=('name', 'color'),
