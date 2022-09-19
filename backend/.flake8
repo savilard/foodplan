@@ -38,4 +38,5 @@ per-file-ignores =
   apps/*/api/serializers.py: WPS306
   tests/*/*/*.py: S101
   tests/*/*.py: S101
-  tests/factories/*.py: WPS306, D102
+  tests/factories/*.py: WPS305, WPS306, D102
+  tests/test_apps/*/*.py: WPS305, WPS306, D102
