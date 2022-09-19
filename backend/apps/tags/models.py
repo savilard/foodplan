@@ -2,12 +2,12 @@ from django.db import models
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.models import TimestampedModelWithUUID
+from apps.core.models import BaseModel
 
 models.CharField.register_lookup(models.functions.Length, 'len')
 
 
-class Tag(TimestampedModelWithUUID):
+class Tag(BaseModel):
     name = models.CharField(
         verbose_name=_('Name'),
         max_length=200,

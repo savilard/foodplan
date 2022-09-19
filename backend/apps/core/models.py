@@ -5,21 +5,14 @@ from django.db import models
 from behaviors.behaviors import Timestamped
 
 
-class DefaultModel(models.Model):
-    """Project default model."""
-
-    uuid = models.UUIDField(db_index=True, unique=True, default=uuid.uuid4)
-
-    class Meta:
-        abstract = True
-
-
-class TimestampedModelWithUUID(DefaultModel, Timestamped):
+class BaseModel(Timestamped):
     """
-    Default app model that has `created` and `updated` attributes.
+    Base app model that has `created` and `updated` attributes.
 
     Currently based on https://github.com/audiolion/django-behaviors
     """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     class Meta:
         abstract = True

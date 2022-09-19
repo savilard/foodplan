@@ -40,7 +40,7 @@ class CustomUserAdmin(UserAdmin):
             'Техническая информация',
             {
                 'classes': ('collapse',),
-                'fields': ('uuid',),
+                'fields': ('id',),
             },
         ),
     )
@@ -49,4 +49,4 @@ class CustomUserAdmin(UserAdmin):
     )
     search_fields = ('email', 'username')
     ordering = ('email',)
-    readonly_fields = ('uuid',)
+    readonly_fields = ('id',)

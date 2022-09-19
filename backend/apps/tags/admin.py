@@ -24,14 +24,14 @@ class TagAdmin(admin.ModelAdmin):
                     'collapse',
                 ),
                 'fields': (
-                    'uuid',
+                    'id',
                 ),
             },
         ),
     )
 
     readonly_fields = (
-        'uuid',
+        'id',
     )
     list_display = (
         'name',
