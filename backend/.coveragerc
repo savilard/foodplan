@@ -1,0 +1,7 @@
+[report]
+omit =
+   *tests*
+   *config*
+   *migrations*
+    manage.py
+    conftest.py
