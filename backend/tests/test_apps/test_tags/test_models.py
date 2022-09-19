@@ -7,6 +7,13 @@ from tests.factories.tag_factory import TagFactory
 pytestmark = [pytest.mark.django_db]
 
 
+def test_create_tag(tag_factory: TagFactory) -> None:
+    """Test tag create."""
+    tag = tag_factory.create()
+
+    assert str(tag) == tag.name
+
+
 def test_name_color_unique_together(tag_factory: TagFactory) -> None:
     """Checking the uniqueness of the name and color fields together.
 
