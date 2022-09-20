@@ -23,6 +23,7 @@ exclude =
   manage.py
   apps/*/migrations/*.py
   apps/*/apps.py
+  tests/
 
 # Self settings:
 max-imports = 15
@@ -33,10 +34,7 @@ per-file-ignores =
   # Allow `__init__.py` with logic for configuration:
   config/settings/*.py: WPS226, WPS407, WPS412, WPS432
   apps/*/models.py: WPS306, WPS420, D101, D105, WPS604, WPS323, WPS305, WPS432
+  apps/*/models/*.py: WPS306, WPS420, D101, D105, WPS604, WPS323, WPS305, WPS432, F401, WPS412
   apps/*/admin.py: D101, WPS226
   apps/*/forms.py: D101, WPS306, D101
   apps/*/api/serializers.py: WPS306
-  tests/*/*/*.py: S101
-  tests/*/*.py: S101
-  tests/factories/*.py: WPS305, WPS306, D102
-  tests/test_apps/*/*.py: WPS305, WPS306, D102
