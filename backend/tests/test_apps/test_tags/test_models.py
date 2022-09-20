@@ -14,6 +14,13 @@ def test_create_tag(tag_factory: TagFactory) -> None:
     assert str(tag) == tag.name
 
 
+def test_tag_str(tag_factory: TagFactory) -> None:
+    """Test tag model __str__."""
+    tag = tag_factory.create(name='Завтрак', color='#55A15E', slug='breakfast')
+
+    assert tag.__str__() == 'Завтрак'
+
+
 def test_name_color_unique_together(tag_factory: TagFactory) -> None:
     """Checking the uniqueness of the name and color fields together.
 
