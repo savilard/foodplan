@@ -17,8 +17,8 @@ class Ingredient(BaseModel):
     )
 
     class Meta:
-        verbose_name = _('Measurement unit')
-        verbose_name_plural = _('Measurement units')
+        verbose_name = _('Ingredient')
+        verbose_name_plural = _('Ingredients')
         constraints = (
             models.UniqueConstraint(
                 fields=('name', 'measurement_unit'),
