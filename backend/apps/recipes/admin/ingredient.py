@@ -5,6 +5,7 @@ from apps.recipes.models import Ingredient
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
+    show_full_result_count = False
     fieldsets = (
         (
             None,
