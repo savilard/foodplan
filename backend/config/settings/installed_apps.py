@@ -15,6 +15,7 @@ THIRD_PARTY_APPS: Tuple[str, ...] = (
     'rest_framework.authtoken',
     'djoser',
     'debug_toolbar',
+    'django_filters',
 )
 
 LOCAL_APPS: Tuple[str, ...] = (
