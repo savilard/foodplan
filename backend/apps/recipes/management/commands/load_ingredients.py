@@ -3,14 +3,14 @@ import json
 from pathlib import Path
 from typing import List, Set
 
-from django.apps import apps
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
 from django.core.management.base import CommandParser
 
 import pydantic
 
-from apps.recipes.management.commands.schemas import Ingredient
+from apps.recipes import models
+from apps.recipes.management.commands import schemas
 
 
 class Command(BaseCommand):
@@ -59,7 +59,7 @@ def _check_file(file_path: Path, file_ext: str, supported_ext: Set[str]) -> None
         raise CommandError('File not found.')
 
 
-def _get_ingredients_from_json_file(file_path: Path) -> List[Ingredient]:
+def _get_ingredients_from_json_file(file_path: Path) -> List[schemas.Ingredient]:
     """Gets ingredients from json file.
 
     Args:
@@ -70,10 +70,10 @@ def _get_ingredients_from_json_file(file_path: Path) -> List[Ingredient]:
     """
     with open(file_path, 'r') as file_content:
         raw_ingredients = json.load(file_content)
-        return pydantic.parse_obj_as(List[Ingredient], raw_ingredients)
+        return pydantic.parse_obj_as(List[schemas.Ingredient], raw_ingredients)
 
 
-def _get_ingredients_from_csv_file(file_path: Path) -> List[Ingredient]:
+def _get_ingredients_from_csv_file(file_path: Path) -> List[schemas.Ingredient]:
     """Gets ingredients from csv file.
 
     Args:
@@ -82,22 +82,21 @@ def _get_ingredients_from_csv_file(file_path: Path) -> List[Ingredient]:
     Returns:
         object: ingredients list
     """
-    ingredient_fields = list(Ingredient.schema()['properties'].keys())
+    ingredient_fields = list(schemas.Ingredient.schema()['properties'].keys())
     with open(file_path, 'r') as file_content:
         reader = csv.DictReader(file_content, fieldnames=ingredient_fields)
-        return pydantic.parse_obj_as(List[Ingredient], list(reader))
+        return pydantic.parse_obj_as(List[schemas.Ingredient], list(reader))
 
 
-def _save_ingredients_to_db(ingredients: List[Ingredient]) -> None:
+def _save_ingredients_to_db(ingredients: List[schemas.Ingredient]) -> None:
     """Save ingredients to db.
 
     Args:
         ingredients: ingredients list
     """
-    ingredient_model = apps.get_model('recipes', 'Ingredient')
-    ingredient_model.objects.bulk_create(
+    models.Ingredient.objects.bulk_create(
         [
-            ingredient_model(**ingredient.dict())
+            models.Ingredient(**ingredient.dict())
             for ingredient in ingredients
         ],
         ignore_conflicts=True,
