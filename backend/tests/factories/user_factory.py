@@ -2,32 +2,30 @@ from typing import Any, Sequence
 
 from django.conf import settings
 
-from factory import Faker
-from factory import post_generation
-from factory.django import DjangoModelFactory
+import factory
 
 PASSWORD_LENGTH = 42
 
 
-class UserFactory(DjangoModelFactory):
+class UserFactory(factory.django.DjangoModelFactory):
     """Custom user factory."""
 
-    username = Faker('user_name')
-    email = Faker('email')
-    first_name = Faker('first_name')
-    last_name = Faker('last_name')
+    username = factory.Faker('user_name')
+    email = factory.Faker('email')
+    first_name = factory.Faker('first_name')
+    last_name = factory.Faker('last_name')
     is_staff = False
 
     class Meta:
         model = settings.AUTH_USER_MODEL
         django_get_or_create = ('username',)
 
-    @post_generation
+    @factory.post_generation
     def password(self, create: bool, extracted: Sequence[Any], **kwargs):
         password = (
             extracted
             if extracted
-            else Faker(
+            else factory.Faker(
                 'password',
                 length=PASSWORD_LENGTH,
                 special_chars=True,
