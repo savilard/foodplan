@@ -31,7 +31,7 @@ exclude =
 # Self settings:
 max-imports = 15
 
-ignore = D100, D104, D106, D401, X100, W504, RST303, RST304, DAR103, DAR203, WPS300, WPS305, DAR101, DAR201
+ignore = D100, D104, D106, D401, X100, W504, RST303, RST304, DAR103, DAR203, WPS300, WPS305, DAR101, DAR201, WPS602
 
 per-file-ignores =
   config/settings/*.py: WPS226, WPS407, WPS412, WPS432
@@ -40,6 +40,10 @@ per-file-ignores =
   apps/*/admin.py: D101, WPS226
   apps/*/forms.py: D101, WPS306, D101
   apps/*/api/serializers.py: WPS306
-  apps/*/api/serializers/*.py: WPS306
+  apps/*/api/permissions.py: WPS110, D101, D102
+  apps/*/api/pagination.py: WPS110, D101, D102
+  apps/*/api/serializers/*.py: WPS306, D101
   apps/*/api/filters/*.py: WPS306, DAR101, DAR201
   apps/*/api/serializers/__init__.py: WPS412, F401
+  apps/*/services/__init__.py: WPS412, F401
+  apps/*/services/__init__.py: WPS412, F401
