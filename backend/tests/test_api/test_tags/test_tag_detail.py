@@ -13,7 +13,7 @@ pytestmark = [pytest.mark.django_db]
 
 def get_tag_detail_url(tag_id: str) -> str:
     """Return a tag detail url."""
-    return reverse('tags-detail', args=[tag_id])
+    return reverse('api:tags-detail', args=[tag_id])
 
 
 def test_retrieve_tag_success(tag_factory: TagFactory, client: APIClient) -> None:

@@ -7,7 +7,7 @@ from rest_framework import status
 
 pytestmark = [pytest.mark.django_db]
 
-CREATE_USER_URL = reverse('users-list')
+CREATE_USER_URL = reverse('api:users-list')
 User = get_user_model()
 
 

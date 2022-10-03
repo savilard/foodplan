@@ -8,7 +8,7 @@ from tests.factories.ingredient_factory import IngredientFactory
 
 pytestmark = [pytest.mark.django_db]
 
-GET_INGREDIENT_LIST_URL = reverse('ingredients-list')
+GET_INGREDIENT_LIST_URL = reverse('api:ingredients-list')
 TOTAL_INGREDIENTS_NUMBER = 3
 
 

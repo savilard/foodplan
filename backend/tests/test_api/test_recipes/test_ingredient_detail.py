@@ -13,7 +13,7 @@ pytestmark = [pytest.mark.django_db]
 
 def get_ingredient_detail_url(ingredient_id: str) -> str:
     """Return a ingredient detail url."""
-    return reverse('ingredients-detail', args=[ingredient_id])
+    return reverse('api:ingredients-detail', args=[ingredient_id])
 
 
 def test_retrieve_ingredient_success(ingredient_factory: IngredientFactory, client: APIClient) -> None:

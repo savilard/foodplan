@@ -6,7 +6,7 @@ from rest_framework import status
 
 pytestmark = [pytest.mark.django_db]
 
-GET_LISTS_URL = reverse('tags-list')
+GET_LISTS_URL = reverse('api:tags-list')
 TOTAL_TAGS_NUMBER = 3
 
 
