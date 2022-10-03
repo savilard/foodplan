@@ -71,7 +71,9 @@ ENV PYTHONFAULTHANDLER=1 \
     PYTHONHASHSEED=random \
     PYTHONDONTWRITEBYTECODE=1
 
-RUN useradd --create-home --uid=${APP_USER_UID} ${APP_USER} \
+RUN useradd --uid=${APP_USER_UID} ${APP_USER} \
+    && mkdir -p '/var/www/django/static' '/var/www/django/media' \
+    && chown ${APP_USER}:${APP_USER} '/var/www/django/static' '/var/www/django/media' \
     && mkdir -p ${VIRTUAL_ENV} \
     && chown ${APP_USER}:${APP_USER} ${VIRTUAL_ENV}
 
@@ -100,7 +102,7 @@ FROM base AS release
 COPY --from=builder --chown=${APP_USER}:${APP_USER} ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY --chown=${APP_USER}:${APP_USER} ./backend ${APP_ROOT}
 
-RUN SECRET_KEY=empty python manage.py collectstatic --noinput
+RUN SECRET_KEY=empty DOMAIN_NAME=empty python manage.py collectstatic --noinput
 
 USER ${APP_USER}
 EXPOSE 8000

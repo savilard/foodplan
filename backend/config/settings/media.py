@@ -1,4 +1,4 @@
 from config.settings.environs import env
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = env('MEDIA_ROOT', default='media')
+MEDIA_URL = env('MEDIA_ROOT', default='/media/')
+MEDIA_ROOT = '/var/www/django/media'

@@ -2,16 +2,18 @@ version: "3.8"
 
 services:
   backend:
-    container_name: app-backend
+    image: 'foodplan_backend:dev'
     restart: always
     build:
         context: .
         dockerfile: ./backend/docker/django/Dockerfile
         args:
           - APP_ENV=dev
-    command: python manage.py runserver 0.0.0.0:8000
+    command: bash ./docker/django/gunicorn.sh
     volumes:
       - ./backend:/opt/app/
+      - backend_static_data:/var/www/django/static
+      - backend_media_data:/var/www/django/media
     ports:
       - "8000:8000"
     depends_on:
@@ -20,21 +22,16 @@ services:
       SECRET_KEY: ${SECRET_KEY-REPLACE_ME}
       DEBUG: ${DEBUG-TRUE}
       DATABASE_URL: ${DATABASE_URL-postgres://app_dev:OwOtBdfep9Frut@db:5432/app_dev}
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS-127.0.0.1,localhost}
-    healthcheck:
-      test: curl --fail http://localhost:8000 || exit 1
-      interval: 10s
-      timeout: 10s
-      start_period: 10s
-      retries: 3
+      DOMAIN_NAME: ${DOMAIN_NAME:-REPLACE_ME}
 
   frontend:
-    image: app_frontend
+    image: 'foodplan_frontend:dev'
     build:
       context: .
       dockerfile: ./frontend/Dockerfile
-    volumes:
-      - ./frontend:/app/result_build/
+    command: serve -s build -l 3000
+    ports:
+      - "127.0.0.1:3000:3000"
 
   db:
     image: postgres:14.4-alpine
@@ -57,9 +54,12 @@ services:
       - "80:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./frontend/build:/usr/share/nginx/html/
       - ./docs/redoc.html:/usr/src/app/api/docs/redoc.html
       - ./docs/openapi-schema.yml:/usr/src/app/api/docs/openapi-schema.yml
+      - backend_static_data:/usr/src/app/backend_data/static/
+      - backend_media_data:/usr/src/app/backend_data/media/
 
 volumes:
   postgres_data:
+  backend_static_data:
+  backend_media_data:

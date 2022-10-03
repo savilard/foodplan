@@ -8,6 +8,8 @@ from apps.recipes.api.viewsets import RecipeViewSet
 from apps.tags.api.viewsets import TagViewSet
 from apps.users.api.viewsets import UserViewSet
 
+app_name = 'api'
+
 router = DefaultRouter()
 router.register('users', UserViewSet, basename='users')
 router.register('tags', TagViewSet, basename='tags')
@@ -15,7 +17,6 @@ router.register('ingredients', IngredientViewSet, basename='ingredients')
 router.register('recipes', RecipeViewSet, basename='recipes')
 
 urlpatterns = [
-    path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
-    path('v1/', include(router.urls)),
+    path('', include(router.urls)),
 ]
