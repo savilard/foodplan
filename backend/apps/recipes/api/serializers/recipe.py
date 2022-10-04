@@ -7,6 +7,7 @@ from apps.recipes.models import Recipe
 from apps.recipes.models.recipes import RecipeIngredient
 from apps.tags.api.serializers import TagSerializer
 from apps.tags.models import Tag
+from apps.users.api.serializers import CustomUserCreateSerializer
 
 
 class RecipeIngredientSerializer(serializers.ModelSerializer):
@@ -28,6 +29,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     tags = TagSerializer(many=True, read_only=True)
     ingredients = IngredientSerializer(many=True, read_only=True)
+    author = CustomUserCreateSerializer(read_only=True)
 
     class Meta:
         model = Recipe
