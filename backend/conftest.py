@@ -16,12 +16,14 @@ register(TagFactory)
 
 @pytest.fixture
 def api_client():
+    """Drf api client fixture without auth."""
     return APIClient()
 
 
 @pytest.fixture
-def api_user_client(api_client: APIClient, user_factory: UserFactory) -> APIClient:
+def api_user_client(api_client: APIClient, user_factory: UserFactory) -> APIClient:  # noqa: WPS442
+    """Drf api client with user token auth."""
     author = user_factory.create()
     token = Token.objects.create(user=author)
-    api_client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+    api_client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
     return api_client
