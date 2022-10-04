@@ -47,7 +47,7 @@ class Recipe(BaseModel):
     class Meta:
         verbose_name = _('Recipe')
         verbose_name_plural = _('Recipes')
-        ordering = ('name',)
+        ordering = ('-created',)
 
     def __str__(self) -> str:
         return f'{self.name}'.strip()
