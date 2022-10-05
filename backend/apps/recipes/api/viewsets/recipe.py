@@ -26,7 +26,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
         validated_data = validate_recipe_data(recipe_data=request.data, serializer=self.recipe_create_serializer_class)
         service = RecipeService(author=self.request.user, validated_data=validated_data)
         recipe = service.create()
-        return Response(self.recipe_retrieve_serializer_class(recipe).data, status=status.HTTP_201_CREATED)
+        return Response(
+            self.recipe_retrieve_serializer_class(recipe, context={'request': request}).data,
+            status=status.HTTP_201_CREATED,
+        )
 
     def get_serializer_class(self):
         if self.action in {'create', 'update', 'partial_update'}:
