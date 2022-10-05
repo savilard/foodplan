@@ -32,3 +32,17 @@ class UserViewSet(DjoserUserViewSet):
         user.followers.add(author)
 
         return Response({'status': 'ok'}, status=status.HTTP_201_CREATED)
+
+    @subscribe.mapping.delete
+    def unsubscribe(self, request: HttpRequest, id: typing.Optional[str] = None):
+        user = request.user
+        author = get_object_or_404(CustomUser, id=id)
+
+        if user == author:
+            return Response({'errors': 'Вы не можете отписаться от самого себя'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if user.followers.filter(id=author.id).exists():
+            user.followers.remove(author)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response({'errors': 'Вы уже отписались'}, status=status.HTTP_400_BAD_REQUEST)
