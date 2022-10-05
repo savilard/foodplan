@@ -32,6 +32,7 @@ class CustomUserAdmin(UserAdmin):
                     'email',
                     'username',
                     'password',
+                    'followers',
                 ),
             },
         ),
