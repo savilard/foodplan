@@ -7,6 +7,11 @@ help:
 	@echo "Targets:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-16s\033[0m %s\n", $$1, $$2}'
 
+.PHONY: init
+init: ## Initial project setup for development
+	@docker-compose run --rm backend sh -c "python manage.py migrate"
+	@docker-compose run --rm backend sh -c "python manage.py createsuperuser --noinput"
+	@docker-compose run --rm backend sh -c "python manage.py load_ingredients --file assets/ingredients.json"
 
 .PHONY: test
 test: ## Run pytest
