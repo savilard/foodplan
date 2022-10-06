@@ -42,7 +42,7 @@ per-file-ignores =
   apps/*/api/serializers.py: WPS306
   apps/*/api/permissions.py: WPS110, D101, D102
   apps/*/api/pagination.py: WPS110, D101, D102
-  apps/*/api/serializers/*.py: WPS306, D101
+  apps/*/api/serializers/*.py: WPS306, D101, WPS615
   apps/*/api/filters/*.py: WPS306, DAR101, DAR201
   apps/*/api/serializers/__init__.py: WPS412, F401
   apps/*/services/__init__.py: WPS412, F401
