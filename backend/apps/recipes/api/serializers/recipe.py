@@ -159,6 +159,8 @@ class RecipeAuthorSerializer(serializers.ModelSerializer):
             recipe_author: recipe author
         """
         request = self.context.get('request')
+        if not request:
+            return None
         limit = request.GET.get('recipes_limit')
         queryset = Recipe.objects.filter(author=recipe_author)
         if limit:

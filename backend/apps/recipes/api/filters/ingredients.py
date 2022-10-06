@@ -37,9 +37,9 @@ def get_query(query_string: str, search_fields: Iterable[str]):
         for field_name in search_fields:
             search_query = models.Q(**{f'{field_name}__icontains': term})
             or_query = (
-                search_query if or_query is None else search_query | or_query
+                search_query if or_query is None else search_query | or_query  # type: ignore
             )
-        query = or_query if query is None else query & or_query
+        query = or_query if query is None else query & or_query  # type: ignore
     return query
 
 
