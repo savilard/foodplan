@@ -1,3 +1,5 @@
+import typing
+
 from djoser.serializers import UserCreateSerializer
 from rest_framework import serializers
 
@@ -34,12 +36,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
             'is_subscribed',
         )
 
-    def get_is_subscribed(self, author: CustomUser) -> bool:  # noqa: WPS615
+    def get_is_subscribed(self, author: CustomUser) -> typing.Optional[bool]:  # noqa: WPS615
         """Checks if the user is subscribed to the author of the recipe.
 
         Args:
             author: recipe author.
         """
         user = self.context['request'].user
-        if not user.is_anonymous:
-            return user.followers.filter(id=author.id).exists()
+        if user.is_anonymous:
+            return None
+        return user.follow_by.filter(id=author.id).exists()

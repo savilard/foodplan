@@ -9,6 +9,7 @@ from apps.tags.api.serializers import TagSerializer
 from apps.tags.models import Tag
 from apps.users.api.serializers import CustomUserSerializer
 from apps.users.models import CustomUser
+from apps.users.selectors import is_user_subscribed_to_author
 
 
 class RecipeIngredientSerializer(serializers.ModelSerializer):
@@ -110,7 +111,7 @@ class RecipeAuthorSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):
         user = self.context['request'].user
-        return user.followers.filter(id=obj.id).exists()
+        return is_user_subscribed_to_author(user=user, author=obj)
 
     def get_recipes_count(self, obj):
         return Recipe.objects.filter(author=obj).count()

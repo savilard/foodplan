@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.models import BaseModel
 
 
-class CustomUser(AbstractUser, BaseModel):
+class CustomUser(AbstractUser, BaseModel):  # type: ignore
     """Custom user model."""
 
     follow_by = models.ManyToManyField(
