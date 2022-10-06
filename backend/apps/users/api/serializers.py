@@ -19,6 +19,8 @@ class CustomUserCreateSerializer(UserCreateSerializer):
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    """Model serializer for custom user."""
+
     is_subscribed = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -32,7 +34,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
             'is_subscribed',
         )
 
-    def get_is_subscribed(self, obj):
+    def get_is_subscribed(self, author: CustomUser) -> bool:  # noqa: WPS615
+        """Checks if the user is subscribed to the author of the recipe.
+
+        Args:
+            author: recipe author.
+        """
         user = self.context['request'].user
         if not user.is_anonymous:
-            return user.followers.filter(id=obj.id).exists()
+            return user.followers.filter(id=author.id).exists()

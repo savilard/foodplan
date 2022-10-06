@@ -16,13 +16,19 @@ from apps.users.models import CustomUser
 
 
 class UserViewSet(DjoserUserViewSet):
-    """ViewSet пользователя."""
+    """Custom user ViewSet."""
 
     serializer_class = CustomUserSerializer
     pagination_class = LimitPageNumberPagination
 
     @action(methods=['post'], detail=True, permission_classes=(IsAuthenticated, ))
-    def subscribe(self, request: HttpRequest, id: typing.Optional[str] = None):
+    def subscribe(self, request: HttpRequest, id: typing.Optional[str] = None):  # noqa: WPS125
+        """Allows an authorized user to subscribe to the author of a recipe.
+
+        Args:
+            request (object): Django http request,
+            id (str): The id of the author of the recipe to which the user subscribes
+        """
         user = request.user
         author = get_object_or_404(CustomUser, id=id)
 
@@ -37,7 +43,13 @@ class UserViewSet(DjoserUserViewSet):
         return Response({'status': 'ok'}, status=status.HTTP_201_CREATED)
 
     @subscribe.mapping.delete
-    def unsubscribe(self, request: HttpRequest, id: typing.Optional[str] = None):
+    def unsubscribe(self, request: HttpRequest, id: typing.Optional[str] = None):  # noqa: WPS125
+        """Allows an authorized user to unsubscribe to the author of a recipe.
+
+        Args:
+            request (object): Django http request,
+            id (str): The id of the author of the recipe from which the user is unsubscribing
+        """
         user = request.user
         author = get_object_or_404(CustomUser, id=id)
 
@@ -52,6 +64,11 @@ class UserViewSet(DjoserUserViewSet):
 
     @action(methods=['get'], detail=False, permission_classes=(IsAuthenticated, ))
     def subscriptions(self, request: HttpRequest):
+        """Get users that the current user is subscribed to.
+
+        Args:
+            request (object): Django http request,
+        """
         queryset = request.user.followers.all()
         pages = self.paginate_queryset(queryset)
         serializer = RecipeAuthorSerializer(pages, many=True, context={'request': request})
