@@ -21,9 +21,13 @@ test: ## Run pytest
 lint: ## Run flake8
 	@docker-compose run --rm backend sh -c "flake8"
 
+.PHONY: typehint
+typehint: ## Run mypy
+	@docker-compose run --rm backend sh -c "mypy apps"
+
 .PHONY: start
 start: ## Start project
 	@docker-compose up --build
 
 .PHONY: check
-check: lint test ## Check project by flake8 and pytest
+check: lint test typehint ## Check project by flake8, pytest and mypy
