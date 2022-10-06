@@ -21,7 +21,7 @@ class UserViewSet(DjoserUserViewSet):
     serializer_class = CustomUserSerializer
     pagination_class = LimitPageNumberPagination
 
-    @action(methods=['post'], detail=True, permission_classes=(IsAuthenticated, ))
+    @action(methods=['post'], detail=True, permission_classes=(IsAuthenticated,))
     def subscribe(self, request: HttpRequest, id: typing.Optional[str] = None):  # noqa: WPS125
         """Allows an authorized user to subscribe to the author of a recipe.
 
@@ -33,10 +33,16 @@ class UserViewSet(DjoserUserViewSet):
         author = get_object_or_404(CustomUser, id=id)
 
         if user == author:
-            return Response({'errors': 'You cannot subscribe to yourself'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'errors': 'You cannot subscribe to yourself'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         if user.followers.filter(id=author.id).exists():
-            return Response({'errors': 'You are already subscribed to this user'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'errors': 'You are already subscribed to this user'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         user.followers.add(author)
 
@@ -56,15 +62,21 @@ class UserViewSet(DjoserUserViewSet):
         author = get_object_or_404(CustomUser, id=id)
 
         if user == author:
-            return Response({'errors': 'Вы не можете отписаться от самого себя'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'errors': 'Вы не можете отписаться от самого себя'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         if user.followers.filter(id=author.id).exists():
             user.followers.remove(author)
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-        return Response({'errors': 'Вы уже отписались'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {'errors': 'Вы уже отписались'},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
-    @action(methods=['get'], detail=False, permission_classes=(IsAuthenticated, ))
+    @action(methods=['get'], detail=False, permission_classes=(IsAuthenticated,))
     def subscriptions(self, request: HttpRequest):
         """Get users that the current user is subscribed to.
 
@@ -73,6 +85,10 @@ class UserViewSet(DjoserUserViewSet):
         """
         queryset = request.user.followers.all()
         pages = self.paginate_queryset(queryset)
-        serializer = RecipeAuthorSerializer(pages, many=True, context={'request': request})
+        serializer = RecipeAuthorSerializer(
+            pages,
+            many=True,
+            context={'request': request},
+        )
 
         return self.get_paginated_response(serializer.data)

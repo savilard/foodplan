@@ -15,6 +15,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='customuser',
             name='follow_by',
-            field=models.ManyToManyField(blank=True, related_name='his_following', to=settings.AUTH_USER_MODEL, verbose_name='Who I follow'),
+            field=models.ManyToManyField(
+                blank=True,
+                related_name='his_following',
+                to=settings.AUTH_USER_MODEL,
+                verbose_name='Who I follow',
+            ),
         ),
     ]
