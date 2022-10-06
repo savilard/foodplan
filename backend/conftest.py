@@ -3,6 +3,7 @@ from pytest_factoryboy import register
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
+from apps.users.models import CustomUser
 from tests.factories.ingredient_factory import IngredientFactory
 from tests.factories.recipe_factory import RecipeFactory
 from tests.factories.tag_factory import TagFactory
@@ -21,9 +22,14 @@ def api_client():
 
 
 @pytest.fixture
-def api_user_client(api_client: APIClient, user_factory: UserFactory) -> APIClient:  # noqa: WPS442
+def user(user_factory):
+    """Drf api client fixture without auth."""
+    return user_factory.create()
+
+
+@pytest.fixture
+def api_user_client(api_client: APIClient, user: CustomUser) -> APIClient:  # noqa: WPS442
     """Drf api client with user token auth."""
-    author = user_factory.create()
-    token = Token.objects.create(user=author)
+    token = Token.objects.create(user=user)
     api_client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
     return api_client
