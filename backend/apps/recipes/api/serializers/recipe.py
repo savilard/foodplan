@@ -25,10 +25,11 @@ class RecipeIngredientRetrieveSerializer(serializers.ModelSerializer):
         )
 
     def to_representation(self, instance: RecipeIngredient) -> OrderedDict:
+        """Return ingredient values in one dictionary."""
         representation = super().to_representation(instance)
 
         ingredient_representation = representation.pop('ingredient')
-        for key in ingredient_representation:
+        for key in ingredient_representation.keys():
             representation[key] = ingredient_representation[key]
 
         return representation
@@ -134,17 +135,32 @@ class RecipeAuthorSerializer(serializers.ModelSerializer):
             'recipes',
         )
 
-    def get_is_subscribed(self, obj):
+    def get_is_subscribed(self, recipe_author):
+        """Checks if the user is subscribed to the author of the recipe.
+
+        Args:
+            recipe_author: recipe author.
+        """
         user = self.context['request'].user
-        return is_user_subscribed_to_author(user=user, author=obj)
+        return is_user_subscribed_to_author(user=user, author=recipe_author)
 
-    def get_recipes_count(self, obj):
-        return Recipe.objects.filter(author=obj).count()
+    def get_recipes_count(self, recipe_author):
+        """Get number of recipes by the author.
 
-    def get_recipes(self, obj):
+        Args:
+            recipe_author: recipe author
+        """
+        return Recipe.objects.filter(author=recipe_author).count()
+
+    def get_recipes(self, recipe_author):
+        """Get recipes by the author.
+
+        Args:
+            recipe_author: recipe author
+        """
         request = self.context.get('request')
         limit = request.GET.get('recipes_limit')
-        queryset = Recipe.objects.filter(author=obj)
+        queryset = Recipe.objects.filter(author=recipe_author)
         if limit:
             queryset = queryset[:int(limit)]
         return CropRecipeSerializer(queryset, many=True).data
