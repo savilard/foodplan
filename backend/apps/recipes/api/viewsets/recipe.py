@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from apps.recipes.api.pagination import LimitPageNumberPagination
 from apps.recipes.api.permissions import IsOwnerOrReadOnly
-from apps.recipes.api.serializers import RecipeSerializer
+from apps.recipes.api.serializers import RecipeRetrieveSerializer
 from apps.recipes.api.serializers.recipe import RecipeCreateSerializer
 from apps.recipes.api.validators.recipe import validate_recipe_data
 from apps.recipes.models import Recipe
@@ -16,7 +16,7 @@ from apps.recipes.services import RecipeService
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.prefetch_related('tags', 'ingredients')
-    recipe_retrieve_serializer_class = RecipeSerializer
+    recipe_retrieve_serializer_class = RecipeRetrieveSerializer
     recipe_create_serializer_class = RecipeCreateSerializer
     pagination_class = LimitPageNumberPagination
     permission_classes = (IsOwnerOrReadOnly, IsAuthenticatedOrReadOnly)

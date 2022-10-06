@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
@@ -12,25 +14,34 @@ from apps.users.models import CustomUser
 from apps.users.selectors import is_user_subscribed_to_author
 
 
-class RecipeIngredientSerializer(serializers.ModelSerializer):
-    id = serializers.PrimaryKeyRelatedField(
-        queryset=Ingredient.objects.all(),
-        source='ingredient',
-    )
+class RecipeIngredientRetrieveSerializer(serializers.ModelSerializer):
+    ingredient = IngredientSerializer()
 
     class Meta:
         model = RecipeIngredient
         fields = (
-            'id',
+            'ingredient',
             'amount',
         )
 
+    def to_representation(self, instance: RecipeIngredient) -> OrderedDict:
+        representation = super().to_representation(instance)
 
-class RecipeSerializer(serializers.ModelSerializer):
+        ingredient_representation = representation.pop('ingredient')
+        for key in ingredient_representation:
+            representation[key] = ingredient_representation[key]
+
+        return representation
+
+
+class RecipeRetrieveSerializer(serializers.ModelSerializer):
     """Serializer for Recipe model."""
 
     tags = TagSerializer(many=True, read_only=True)
-    ingredients = IngredientSerializer(many=True, read_only=True)
+    ingredients = RecipeIngredientRetrieveSerializer(
+        source='recipe_ingredients',
+        many=True,
+    )
     author = CustomUserSerializer(read_only=True)
 
     class Meta:
@@ -47,11 +58,25 @@ class RecipeSerializer(serializers.ModelSerializer):
         )
 
 
+class RecipeIngredientCreateSerializer(serializers.ModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(
+        queryset=Ingredient.objects.all(),
+        source='ingredient',
+    )
+
+    class Meta:
+        model = RecipeIngredient
+        fields = (
+            'id',
+            'amount',
+        )
+
+
 class RecipeCreateSerializer(serializers.ModelSerializer):
     """Serializer for create recipe."""
 
     image = Base64ImageField()
-    ingredients = RecipeIngredientSerializer(
+    ingredients = RecipeIngredientCreateSerializer(
         many=True,
         source='recipe_ingredients',
     )
