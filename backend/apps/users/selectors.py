@@ -9,7 +9,7 @@ def get_user_followers(user):
     Args:
         user: auth user.
     """
-    return user.followers.all()
+    return user.follow_by.all()
 
 
 def get_user_by(user_id: str) -> CustomUser:
@@ -28,4 +28,4 @@ def is_user_subscribed_to_author(user: CustomUser, author: CustomUser) -> bool:
         user: auth project user;
         author: recipe author.
     """
-    return user.followers.filter(id=author.id).exists()
+    return user.follow_by.filter(id=author.id).exists()

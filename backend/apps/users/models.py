@@ -9,10 +9,10 @@ from apps.core.models import BaseModel
 class CustomUser(AbstractUser, BaseModel):
     """Custom user model."""
 
-    followers = models.ManyToManyField(
+    follow_by = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         verbose_name=_('Who I follow'),
-        related_name='his_following',
+        related_name='followers',
         blank=True,
         symmetrical=False,
     )

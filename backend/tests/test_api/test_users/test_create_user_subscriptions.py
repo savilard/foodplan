@@ -28,7 +28,7 @@ def test_subscribe_auth_user_to_recipe_author_successful(
     )
 
     assert response.status_code == status.HTTP_201_CREATED
-    assert user.followers.filter(id=recipe_author.id).exists()
+    assert user.follow_by.filter(id=recipe_author.id).exists()
 
 
 def test_user_self_subscription_error(user: CustomUser, api_user_client: APIClient) -> None:
@@ -48,7 +48,7 @@ def test_user_already_subscription_to_recipe_author_error(
     api_user_client: APIClient,
 ) -> None:
     recipe_author = user_factory.create()
-    user.followers.add(recipe_author)
+    user.follow_by.add(recipe_author)
 
     response = api_user_client.post(
         get_user_subscription_url_to(recipe_author.id),

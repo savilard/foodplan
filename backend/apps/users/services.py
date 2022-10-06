@@ -16,8 +16,8 @@ class UserService(object):
 
     def add_follower(self):
         """Add a user to the recipe author's followers."""
-        self.user.followers.add(self.author)
+        self.user.follow_by.add(self.author)
 
     def remove_follower(self):
         """Remove a user to the recipe author's followers."""
-        self.user.followers.remove(self.author)
+        self.user.follow_by.remove(self.author)
