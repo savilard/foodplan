@@ -5,14 +5,16 @@ from django.http import HttpRequest
 from djoser.views import UserViewSet as DjoserUserViewSet
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.recipes.api.pagination import LimitPageNumberPagination
 from apps.recipes.api.serializers import RecipeAuthorSerializer
 from apps.users.api.serializers import CustomUserSerializer
-from apps.users.models import CustomUser
+from apps.users.selectors import get_user_by
+from apps.users.selectors import get_user_followers
+from apps.users.selectors import is_user_subscribed_to_author
+from apps.users.services import UserService
 
 
 class UserViewSet(DjoserUserViewSet):
@@ -30,7 +32,8 @@ class UserViewSet(DjoserUserViewSet):
             id (str): The id of the author of the recipe to which the user subscribes
         """
         user = request.user
-        author = get_object_or_404(CustomUser, id=id)
+        author = get_user_by(user_id=id)
+        service = UserService(user=user, author=author)
 
         if user == author:
             return Response(
@@ -38,13 +41,13 @@ class UserViewSet(DjoserUserViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if user.followers.filter(id=author.id).exists():
+        if is_user_subscribed_to_author(user=user, author=author):
             return Response(
                 {'errors': 'You are already subscribed to this user'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        user.followers.add(author)
+        service.add_follower()
 
         serializer = RecipeAuthorSerializer(author, context={'request': request})
 
@@ -59,7 +62,8 @@ class UserViewSet(DjoserUserViewSet):
             id (str): The id of the author of the recipe from which the user is unsubscribing
         """
         user = request.user
-        author = get_object_or_404(CustomUser, id=id)
+        author = get_user_by(user_id=id)
+        service = UserService(user=user, author=author)
 
         if user == author:
             return Response(
@@ -67,8 +71,8 @@ class UserViewSet(DjoserUserViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if user.followers.filter(id=author.id).exists():
-            user.followers.remove(author)
+        if is_user_subscribed_to_author(user=user, author=author):
+            service.remove_follower()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(
@@ -83,7 +87,7 @@ class UserViewSet(DjoserUserViewSet):
         Args:
             request (object): Django http request,
         """
-        queryset = request.user.followers.all()
+        queryset = get_user_followers(user=request.user)
         pages = self.paginate_queryset(queryset)
         serializer = RecipeAuthorSerializer(
             pages,
