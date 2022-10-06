@@ -40,7 +40,9 @@ class UserViewSet(DjoserUserViewSet):
 
         user.followers.add(author)
 
-        return Response({'status': 'ok'}, status=status.HTTP_201_CREATED)
+        serializer = RecipeAuthorSerializer(author, context={'request': request})
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @subscribe.mapping.delete
     def unsubscribe(self, request: HttpRequest, id: typing.Optional[str] = None):  # noqa: WPS125
