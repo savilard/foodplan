@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel
+from apps.recipes.managers import RecipeQuerySet
 
 
 class Recipe(BaseModel):
@@ -43,6 +44,8 @@ class Recipe(BaseModel):
         ],
         help_text=_('In minutes.'),
     )
+
+    objects = RecipeQuerySet.as_manager()
 
     class Meta:
         verbose_name = _('Recipe')

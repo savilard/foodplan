@@ -1,6 +1,7 @@
 import typing
 
 from django.db import transaction
+from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.http import HttpResponse
 
@@ -22,11 +23,12 @@ from apps.recipes.api.serializers import RecipeRetrieveSerializer
 from apps.recipes.api.serializers.recipe import RecipeCreateSerializer, RecipeUpdateSerializer, CropRecipeSerializer
 from apps.recipes.api.validators.recipe import validate_recipe_data
 from apps.recipes.models import Recipe
+from apps.recipes.selectors.recipe import get_recipes_for
 from apps.recipes.services import RecipeService
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.prefetch_related('tags', 'ingredients')
+    queryset = Recipe.objects.prefetch_related('tags', 'recipe_ingredients__ingredient')
     recipe_retrieve_serializer_class = RecipeRetrieveSerializer
     recipe_create_serializer_class = RecipeCreateSerializer
     recipe_update_serializer_class = RecipeUpdateSerializer
@@ -116,3 +118,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if self.action in {'create', 'update', 'partial_update'}:
             return self.recipe_create_serializer_class
         return self.recipe_retrieve_serializer_class
+
+    def get_queryset(self) -> 'QuerySet[Recipe]':
+        current_user = self.request.user
+        queryset = self.queryset
+        if current_user.is_anonymous:
+            return queryset
+        return get_recipes_for(current_user, queryset=queryset)

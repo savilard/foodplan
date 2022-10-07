@@ -13,7 +13,7 @@ class NumberInFilter(  # noqa: D101
 class RecipeFilter(filters.FilterSet):
     """Recipe filter."""
 
-    is_favorited = filters.BooleanFilter(method='filter_is_favorited')
+    is_favorited = filters.BooleanFilter()
     author = NumberInFilter(field_name='author__id')
     tags = filters.ModelMultipleChoiceFilter(
         field_name='tags__slug',
@@ -27,8 +27,3 @@ class RecipeFilter(filters.FilterSet):
             'author',
             'tags',
         )
-
-    def filter_is_favorited(self, queryset, name, value):  # noqa: WPS110, D102
-        if value and not self.request.user.is_anonymous:
-            return queryset.filter(favorites__user=self.request.user)
-        return queryset

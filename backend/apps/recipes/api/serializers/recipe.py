@@ -4,7 +4,6 @@ import typing
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
-from apps.favorites.models import Favorites
 from apps.recipes.api.serializers import IngredientSerializer
 from apps.recipes.models import Ingredient
 from apps.recipes.models import Recipe
@@ -64,10 +63,9 @@ class RecipeRetrieveSerializer(serializers.ModelSerializer):
 
     def get_is_favorited(self, recipe: Recipe) -> typing.Optional[bool]:
         """Checks if a recipe has been added to favorites."""
-        request = self.context.get('request')
-        if not request:
-            return None
-        return Favorites.objects.filter(user=request.user, recipe=recipe).exists()
+        if hasattr(recipe, 'is_favorited'):  # noqa: WPS421
+            return recipe.is_favorited
+        return None
 
 
 class RecipeIngredientCreateSerializer(serializers.ModelSerializer):
