@@ -107,6 +107,31 @@ class CropRecipeSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'name', 'image', 'cooking_time')
 
 
+class RecipeUpdateSerializer(serializers.ModelSerializer):
+    """Serializer for update recipe."""
+
+    ingredients = RecipeIngredientCreateSerializer(
+        many=True,
+        source='recipe_ingredients',
+    )
+    tags = serializers.PrimaryKeyRelatedField(
+        queryset=Tag.objects.all(),
+        many=True,
+    )
+    id = serializers.CharField()
+
+    class Meta:
+        model = Recipe
+        fields = (
+            'id',
+            'name',
+            'text',
+            'ingredients',
+            'tags',
+            'cooking_time',
+        )
+
+
 class RecipeAuthorSerializer(serializers.ModelSerializer):
     is_subscribed = serializers.SerializerMethodField()
     recipes_count = serializers.SerializerMethodField()
