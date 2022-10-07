@@ -1,4 +1,5 @@
 from tests.factories.ingredient_factory import IngredientFactory
+from tests.factories.favorites_factory import FavoritesFactory
 from tests.factories.recipe_factory import RecipeFactory
 from tests.factories.recipe_factory import RecipeIngredientFactory
 from tests.factories.recipe_factory import RecipeTagFactory

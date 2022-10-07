@@ -17,5 +17,10 @@ class CustomUser(AbstractUser, BaseModel):  # type: ignore
         symmetrical=False,
     )
 
+    @property
+    def full_name(self) -> str:
+        """Return user first name and last name."""
+        return f'{self.first_name} {self.last_name}'.strip()
+
     def __str__(self):
         return self.username

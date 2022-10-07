@@ -31,3 +31,7 @@ start: ## Start project
 
 .PHONY: check
 check: lint test typehint ## Check project by flake8, pytest and mypy
+
+.PHONY: migrate
+migrate: ## Synchronizes the database state with the current set of models and migrations
+	docker-compose run --rm backend sh -c "python manage.py migrate"
