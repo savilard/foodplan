@@ -16,16 +16,16 @@ def get_recipe_detail_url(recipe_id: str) -> str:
     return reverse('api:recipes-detail', args=[recipe_id])
 
 
-def test_retrieve_recipe_success(recipe_factory: RecipeFactory, api_client: APIClient) -> None:
+def test_retrieve_recipe_success(recipe_factory: RecipeFactory, api_user_client: APIClient) -> None:
     """Test retrieve recipe is successful.
 
     Args:
         recipe_factory: ingredient factory;
-        api_client: django rest framework api client.
+        api_user_client: django rest framework api client.
     """
     recipe = recipe_factory.create()
 
-    response = api_client.get(get_recipe_detail_url(recipe_id=recipe.id))
+    response = api_user_client.get(get_recipe_detail_url(recipe_id=recipe.id))
 
     assert response.status_code == status.HTTP_200_OK
     assert UUID(response.json()['id']) == recipe.id
