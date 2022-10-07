@@ -1,14 +1,22 @@
+import typing
+
 from django.db import transaction
+from django.http import HttpRequest
+from django.http import HttpResponse
 
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from rest_framework.generics import get_object_or_404
 
+from apps.favorites.models import Favorites
 from apps.recipes.api.pagination import LimitPageNumberPagination
 from apps.recipes.api.permissions import IsOwnerOrReadOnly
 from apps.recipes.api.serializers import RecipeRetrieveSerializer
-from apps.recipes.api.serializers.recipe import RecipeCreateSerializer, RecipeUpdateSerializer
+from apps.recipes.api.serializers.recipe import RecipeCreateSerializer, RecipeUpdateSerializer, CropRecipeSerializer
 from apps.recipes.api.validators.recipe import validate_recipe_data
 from apps.recipes.models import Recipe
 from apps.recipes.services import RecipeService
@@ -40,6 +48,28 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response(
             self.recipe_retrieve_serializer_class(recipe, context={'request': request}).data,
             status=status.HTTP_200_OK,
+        )
+
+    @action(methods=['post'], detail=True, permission_classes=(IsAuthenticated,))
+    def favorite(self, request: HttpRequest, pk: typing.Optional[str] = None) -> HttpResponse:  # noqa: WPS125
+        """Add recipe to favorites.
+
+        Args:
+            request: drf request;
+            pk: recipe id.
+        """
+        user = request.user
+        recipe = get_object_or_404(Recipe, id=pk)
+        favorites, created = Favorites.objects.get_or_create(user=user, recipe=recipe)
+        if not created:
+            return Response(
+                {'errors': 'The recipe has already been added to favorites'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        return Response(
+            CropRecipeSerializer(recipe, context={'request': request}).data,
+            status=status.HTTP_201_CREATED,
         )
 
     def get_serializer_class(self):

@@ -1,8 +1,10 @@
 from collections import OrderedDict
+import typing
 
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
+from apps.favorites.models import Favorites
 from apps.recipes.api.serializers import IngredientSerializer
 from apps.recipes.models import Ingredient
 from apps.recipes.models import Recipe
@@ -44,6 +46,7 @@ class RecipeRetrieveSerializer(serializers.ModelSerializer):
         many=True,
     )
     author = CustomUserSerializer(read_only=True)
+    is_favorited = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
@@ -56,7 +59,15 @@ class RecipeRetrieveSerializer(serializers.ModelSerializer):
             'ingredients',
             'tags',
             'cooking_time',
+            'is_favorited',
         )
+
+    def get_is_favorited(self, recipe: Recipe) -> typing.Optional[bool]:
+        """Checks if a recipe has been added to favorites."""
+        request = self.context.get('request')
+        if not request:
+            return None
+        return Favorites.objects.filter(user=request.user, recipe=recipe).exists()
 
 
 class RecipeIngredientCreateSerializer(serializers.ModelSerializer):
