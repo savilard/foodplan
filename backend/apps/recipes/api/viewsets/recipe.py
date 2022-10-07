@@ -72,6 +72,39 @@ class RecipeViewSet(viewsets.ModelViewSet):
             status=status.HTTP_201_CREATED,
         )
 
+    @favorite.mapping.delete
+    def remove_recipe_from_favorite(self, request: HttpRequest, pk: typing.Optional[str] = None) -> HttpResponse:  # noqa: WPS125
+        """Remove recipe from favorites.
+
+        Args:
+            request: drf request;
+            pk: recipe id.
+        """
+        user = request.user
+        if user.is_anonymous:
+            return Response(
+                {'errors': 'The user is not authorized.'},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+        recipe = get_object_or_404(Recipe, id=pk)
+        favorites = Favorites.objects.filter(user=user, recipe=recipe)
+        if not favorites.first():
+            return Response(
+                {'errors': 'The recipe you requested has not been added to favorites.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        is_deleted, _ = favorites.delete()
+        if not is_deleted:
+            return Response(
+                {
+                    'errors': 'The recipe was not in the favorites.',
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     def get_serializer_class(self):
         if self.action in {'create', 'update', 'partial_update'}:
             return self.recipe_create_serializer_class
