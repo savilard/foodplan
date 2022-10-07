@@ -46,4 +46,4 @@ per-file-ignores =
   apps/*/api/filters/*.py: WPS306, DAR101, DAR201
   apps/*/api/serializers/__init__.py: WPS412, F401
   apps/*/services/__init__.py: WPS412, F401
-  apps/*/services/__init__.py: WPS412, F401
+  apps/*/managers/__init__.py: WPS412, F401
