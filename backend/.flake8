@@ -35,8 +35,8 @@ ignore = D100, D104, D106, D401, X100, W504, RST303, RST304, DAR103, DAR203, WPS
 
 per-file-ignores =
   config/settings/*.py: WPS226, WPS407, WPS412, WPS432
-  apps/*/models.py: WPS306, WPS420, D101, D105, WPS604, WPS323, WPS305, WPS432
-  apps/*/models/*.py: WPS306, WPS420, D101, D105, WPS604, WPS323, WPS305, WPS432, F401, WPS412, WPS237, WPS221
+  apps/*/models.py: WPS306, WPS420, D101, D105, WPS604, WPS323, WPS305, WPS432, WPS110
+  apps/*/models/*.py: WPS306, WPS420, D101, D105, WPS604, WPS323, WPS305, WPS432, F401, WPS412, WPS237, WPS221, WPS110
   apps/*/admin.py: D101, WPS226
   apps/*/forms.py: D101, WPS306, D101
   apps/*/api/serializers.py: WPS306
