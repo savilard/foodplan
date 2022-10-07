@@ -4,6 +4,8 @@ from django.db import transaction
 from django.http import HttpRequest
 from django.http import HttpResponse
 
+from django_filters import rest_framework as filters
+
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -13,6 +15,7 @@ from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404
 
 from apps.favorites.models import Favorites
+from apps.recipes.api.filters.recipe import RecipeFilter
 from apps.recipes.api.pagination import LimitPageNumberPagination
 from apps.recipes.api.permissions import IsOwnerOrReadOnly
 from apps.recipes.api.serializers import RecipeRetrieveSerializer
@@ -29,6 +32,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
     recipe_update_serializer_class = RecipeUpdateSerializer
     pagination_class = LimitPageNumberPagination
     permission_classes = (IsOwnerOrReadOnly, IsAuthenticatedOrReadOnly)
+    filter_backends = (
+        filters.DjangoFilterBackend,
+    )
+    filterset_class = RecipeFilter
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):
