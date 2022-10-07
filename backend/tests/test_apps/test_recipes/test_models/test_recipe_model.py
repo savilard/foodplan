@@ -1,7 +1,7 @@
 import pytest
 
-from tests.factories.recipe_factory import RecipeFactory
-from tests.factories.user_factory import UserFactory
+from tests.factories import RecipeFactory
+from tests.factories import UserFactory
 
 pytestmark = [pytest.mark.django_db]
 

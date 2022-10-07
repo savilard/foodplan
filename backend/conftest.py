@@ -4,17 +4,13 @@ from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
 from apps.users.models import CustomUser
-from tests.factories.favorites_factory import FavoritesFactory
-from tests.factories.ingredient_factory import IngredientFactory
-from tests.factories.recipe_factory import RecipeFactory
-from tests.factories.tag_factory import TagFactory
-from tests.factories.user_factory import UserFactory
+from tests import factories
 
-register(FavoritesFactory)
-register(IngredientFactory)
-register(RecipeFactory)
-register(UserFactory)
-register(TagFactory)
+register(factories.FavoritesFactory)
+register(factories.IngredientFactory)
+register(factories.RecipeFactory)
+register(factories.UserFactory)
+register(factories.TagFactory)
 
 
 @pytest.fixture

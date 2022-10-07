@@ -6,7 +6,7 @@ import pytest
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from tests.factories.ingredient_factory import IngredientFactory
+from tests.factories import IngredientFactory
 
 pytestmark = [pytest.mark.django_db]
 

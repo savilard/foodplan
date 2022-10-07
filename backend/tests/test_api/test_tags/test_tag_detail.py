@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from tests.factories.tag_factory import TagFactory
+from tests.factories import TagFactory
 
 pytestmark = [pytest.mark.django_db]
 

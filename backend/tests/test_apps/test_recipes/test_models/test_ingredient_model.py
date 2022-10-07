@@ -2,7 +2,7 @@ import pytest
 
 from django.db import IntegrityError
 
-from tests.factories.ingredient_factory import IngredientFactory
+from tests.factories import IngredientFactory
 
 pytestmark = [pytest.mark.django_db]
 
