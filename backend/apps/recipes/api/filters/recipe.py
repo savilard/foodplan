@@ -14,6 +14,7 @@ class RecipeFilter(filters.FilterSet):
     """Recipe filter."""
 
     is_favorited = filters.BooleanFilter()
+    is_in_shopping_cart = filters.BooleanFilter()
     author = NumberInFilter(field_name='author__id')
     tags = filters.ModelMultipleChoiceFilter(
         field_name='tags__slug',
@@ -24,6 +25,7 @@ class RecipeFilter(filters.FilterSet):
     class Meta:
         fields = (
             'is_favorited',
+            'is_in_shopping_cart',
             'author',
             'tags',
         )

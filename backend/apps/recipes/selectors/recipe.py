@@ -8,4 +8,8 @@ def get_recipes_for(current_user: CustomUser, queryset):
         current_user: auth user;
         queryset: recipe queryset.
     """
-    return queryset.with_favorites_status(user=current_user)
+    return (
+        queryset.
+        with_favorites_status(user=current_user).
+        with_is_in_shopping_cart_status(user=current_user)
+    )

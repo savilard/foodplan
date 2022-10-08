@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from apps.carts.models import Cart
 from apps.favorites.models import Favorites
 from apps.recipes.api import serializers as recipe_serializers
 from apps.recipes.api.filters.recipe import RecipeFilter
@@ -106,6 +107,31 @@ class RecipeViewSet(viewsets.ModelViewSet):
             )
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(methods=['post'], detail=True, permission_classes=(IsAuthenticated,))
+    def shopping_cart(self, request: Request, pk: typing.Optional[str] = None) -> Response:  # noqa: WPS125
+        """Add recipe to shopping cart.
+
+        Args:
+            request: drf request;
+            pk: recipe id.
+        """
+        user = request.user
+        recipe = get_object_or_404(Recipe, id=pk)
+        cart, _ = Cart.objects.prefetch_related('recipes').get_or_create(owner=user)
+
+        if recipe.id in cart.recipes.values_list('id', flat=True):
+            return Response(
+                {'errors': 'The recipe has already been added to favorites'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        cart.recipes.add(recipe)
+
+        return Response(
+            recipe_serializers.CropRecipeSerializer(recipe, context={'request': request}).data,
+            status=status.HTTP_201_CREATED,
+        )
 
     def get_serializer_class(self):
         if self.action in {'create', 'update', 'partial_update'}:

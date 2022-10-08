@@ -23,4 +23,4 @@ class Cart(BaseModel):
         verbose_name_plural = _('Shopping lists')
 
     def __str__(self) -> str:
-        return '_("Shopping list"): {owner_full_name}'.format(owner_full_name=self.owner.full_name)
+        return '{title}: {owner_full_name}'.format(title=_('Shopping list'), owner_full_name=self.owner.full_name)

@@ -46,6 +46,7 @@ class RecipeRetrieveSerializer(serializers.ModelSerializer):
     )
     author = CustomUserSerializer(read_only=True)
     is_favorited = serializers.SerializerMethodField()
+    is_in_shopping_cart = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
@@ -59,12 +60,19 @@ class RecipeRetrieveSerializer(serializers.ModelSerializer):
             'tags',
             'cooking_time',
             'is_favorited',
+            'is_in_shopping_cart',
         )
 
     def get_is_favorited(self, recipe: Recipe) -> typing.Optional[bool]:
         """Checks if a recipe has been added to favorites."""
         if hasattr(recipe, 'is_favorited'):  # noqa: WPS421
             return recipe.is_favorited
+        return None
+
+    def get_is_in_shopping_cart(self, recipe: Recipe) -> typing.Optional[bool]:
+        """Checks if a recipe has been added to shopping cart."""
+        if hasattr(recipe, 'is_in_shopping_cart'):  # noqa: WPS421
+            return recipe.is_in_shopping_cart
         return None
 
 
