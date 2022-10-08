@@ -133,6 +133,28 @@ class RecipeViewSet(viewsets.ModelViewSet):
             status=status.HTTP_201_CREATED,
         )
 
+    @shopping_cart.mapping.delete
+    def remove_recipe_from_shopping_cart(self, request: Request, pk: typing.Optional[str] = None) -> Response:  # noqa: WPS125
+        """Remove recipe from shopping cart.
+
+        Args:
+            request: drf request;
+            pk: recipe id.
+        """
+        user = request.user
+        recipe = get_object_or_404(Recipe, id=pk)
+        cart = Cart.objects.prefetch_related('recipes').get(owner=user)
+
+        if recipe.id not in cart.recipes.values_list('id', flat=True):
+            return Response(
+                {'errors': 'The specified recipe is not on the shopping list'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        cart.recipes.remove(recipe)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     def get_serializer_class(self):
         if self.action in {'create', 'update', 'partial_update'}:
             return self.recipe_create_serializer_class
