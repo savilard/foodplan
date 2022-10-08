@@ -1,26 +1,22 @@
 import typing
 
-from django.db import transaction
 from django.db.models import QuerySet
-from django.http import HttpRequest
-from django.http import HttpResponse
 
 from django_filters import rest_framework as filters
-
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.generics import get_object_or_404
 
 from apps.favorites.models import Favorites
+from apps.recipes.api import serializers as recipe_serializers
 from apps.recipes.api.filters.recipe import RecipeFilter
 from apps.recipes.api.pagination import LimitPageNumberPagination
 from apps.recipes.api.permissions import IsOwnerOrReadOnly
-from apps.recipes.api.serializers import RecipeRetrieveSerializer
-from apps.recipes.api.serializers.recipe import RecipeCreateSerializer, RecipeUpdateSerializer, CropRecipeSerializer
 from apps.recipes.api.validators.recipe import validate_recipe_data
 from apps.recipes.models import Recipe
 from apps.recipes.selectors.recipe import get_recipes_for
@@ -29,17 +25,18 @@ from apps.recipes.services import RecipeService
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.prefetch_related('tags', 'recipe_ingredients__ingredient')
-    recipe_retrieve_serializer_class = RecipeRetrieveSerializer
-    recipe_create_serializer_class = RecipeCreateSerializer
-    recipe_update_serializer_class = RecipeUpdateSerializer
+
+    recipe_retrieve_serializer_class = recipe_serializers.RecipeRetrieveSerializer
+    recipe_create_serializer_class = recipe_serializers.RecipeCreateSerializer
+    recipe_update_serializer_class = recipe_serializers.RecipeUpdateSerializer
+
     pagination_class = LimitPageNumberPagination
+
     permission_classes = (IsOwnerOrReadOnly, IsAuthenticatedOrReadOnly)
-    filter_backends = (
-        filters.DjangoFilterBackend,
-    )
+
+    filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = RecipeFilter
 
-    @transaction.atomic
     def create(self, request, *args, **kwargs):
         validated_data = validate_recipe_data(recipe_data=request.data, serializer=self.recipe_create_serializer_class)
         service = RecipeService(author=self.request.user, validated_data=validated_data)
@@ -60,7 +57,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
 
     @action(methods=['post'], detail=True, permission_classes=(IsAuthenticated,))
-    def favorite(self, request: HttpRequest, pk: typing.Optional[str] = None) -> HttpResponse:  # noqa: WPS125
+    def favorite(self, request: Request, pk: typing.Optional[str] = None) -> Response:  # noqa: WPS125
         """Add recipe to favorites.
 
         Args:
@@ -73,16 +70,17 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if not created:
             return Response(
                 {'errors': 'The recipe has already been added to favorites'},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         return Response(
-            CropRecipeSerializer(recipe, context={'request': request}).data,
+            recipe_serializers.CropRecipeSerializer(recipe, context={'request': request}).data,
             status=status.HTTP_201_CREATED,
         )
 
     @favorite.mapping.delete
-    def remove_recipe_from_favorite(self, request: HttpRequest, pk: typing.Optional[str] = None) -> HttpResponse:  # noqa: WPS125
+    def remove_recipe_from_favorite(self, request: Request,
+                                    pk: typing.Optional[str] = None) -> Response:  # noqa: WPS125
         """Remove recipe from favorites.
 
         Args:
@@ -90,17 +88,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
             pk: recipe id.
         """
         user = request.user
-        if user.is_anonymous:
-            return Response(
-                {'errors': 'The user is not authorized.'},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
         recipe = get_object_or_404(Recipe, id=pk)
-        favorites = Favorites.objects.filter(user=user, recipe=recipe)
+        favorites = Favorites.objects.filter(user=user, recipe=recipe)  # type: ignore
         if not favorites.first():
             return Response(
                 {'errors': 'The recipe you requested has not been added to favorites.'},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         is_deleted, _ = favorites.delete()
