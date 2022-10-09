@@ -5,6 +5,7 @@
 </p>
 
 <p align="center">
+    <img alt="Codeclimate" src="https://img.shields.io/codeclimate/maintainability/savilard/foodplan?style=for-the-badge">
   <img alt="Platform" src="https://img.shields.io/badge/platform-linux-green?style=for-the-badge" />
   <img alt="Python version" src="https://img.shields.io/badge/python-3.9-green?style=for-the-badge" />
   <a href="https://github.com/wemake-services/wemake-python-styleguide"><img src="https://img.shields.io/badge/style-wemake-blue?style=for-the-badge" alt="Code style"></a>
