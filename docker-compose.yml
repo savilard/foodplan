@@ -7,7 +7,6 @@ services:
     build:
         context: .
         dockerfile: ./backend/docker/django/Dockerfile
-        target: dev
         args:
           - APP_ENV=dev
     command: python manage.py runserver 0.0.0.0:8000
@@ -51,6 +50,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD-OwOtBdfep9Frut}
 
   nginx:
+    image: 'foodplan_nginx:dev'
     build:
       context: ./nginx
       dockerfile: Dockerfile
