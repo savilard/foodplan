@@ -13,6 +13,8 @@
 Foodplan is a site where users publish recipes, add other people's recipes to their favorites and subscribe to other authors' publications.
 The "Shopping List" service will allow users to create a list of products that need to be bought to prepare selected dishes.
 
+---
+
 <!-- TOC -->
   * [Stack project](#stack-project)
   * [Preparatory works](#preparatory-works)
