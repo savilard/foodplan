@@ -12,7 +12,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from apps.carts.models import Cart
+from apps.carts.selectors import get_shopping_cart_for
+from apps.carts.services import add_recipe_to, remove_recipe_from
 from apps.favorites.models import Favorites
 from apps.recipes.api import serializers as recipe_serializers
 from apps.recipes.api.filters.recipe import RecipeFilter
@@ -118,7 +119,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
         """
         user = request.user
         recipe = get_object_or_404(Recipe, id=pk)
-        cart, _ = Cart.objects.prefetch_related('recipes').get_or_create(owner=user)
+
+        cart = get_shopping_cart_for(current_user=user)
+        if not cart:
+            return Response(
+                {'errors': 'Failed to create or retrieve a shopping list'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         if recipe.id in cart.recipes.values_list('id', flat=True):
             return Response(
@@ -126,7 +133,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        cart.recipes.add(recipe)
+        add_recipe_to(shopping_cart=cart, recipe=recipe)
 
         return Response(
             recipe_serializers.CropRecipeSerializer(recipe, context={'request': request}).data,
@@ -143,7 +150,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
         """
         user = request.user
         recipe = get_object_or_404(Recipe, id=pk)
-        cart = Cart.objects.prefetch_related('recipes').get(owner=user)
+        cart = get_shopping_cart_for(current_user=user)
+        if not cart:
+            return Response(
+                {'errors': 'Failed to create or retrieve a shopping cart'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         if recipe.id not in cart.recipes.values_list('id', flat=True):
             return Response(
@@ -151,7 +163,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        cart.recipes.remove(recipe)
+        remove_recipe_from(shopping_cart=cart, recipe=recipe)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
