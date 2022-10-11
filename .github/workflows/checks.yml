@@ -13,9 +13,18 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Flake8
         run: docker-compose run --rm backend sh -c "flake8"
+
       - name: Pytest
         run: docker-compose run --rm backend sh -c "python manage.py wait_for_db && pytest"
+
+      - name: Upload coverage reports to Codecov with GitHub Action
+        uses: codecov/codecov-action@v3
+
+      - name: Tear down the Stack
+        run: docker-compose down
