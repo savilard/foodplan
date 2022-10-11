@@ -6,6 +6,7 @@ from rest_framework.test import APIClient
 from apps.users.models import CustomUser
 from tests import factories
 
+register(factories.CartFactory)
 register(factories.FavoritesFactory)
 register(factories.IngredientFactory)
 register(factories.RecipeFactory)
