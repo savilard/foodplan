@@ -1,7 +1,6 @@
 import typing
 
 from django.contrib.auth.models import AnonymousUser
-from django.db.models import QuerySet
 
 from apps.carts.models import Cart
 from apps.users.models import CustomUser
