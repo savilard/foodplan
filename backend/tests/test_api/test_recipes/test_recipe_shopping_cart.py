@@ -21,9 +21,10 @@ def test_add_recipe_to_cart_successful(recipe_factory: RecipeFactory, api_user_c
         recipe_factory: ingredient factory;
         api_user_client: django rest framework api client.
     """
+    _, api_client = api_user_client
     recipe = recipe_factory.create()
 
-    response = api_user_client.post(get_add_recipe_to_cart_url(recipe_id=recipe.id))
+    response = api_client.post(get_add_recipe_to_cart_url(recipe_id=recipe.id))
 
     assert response.status_code == status.HTTP_201_CREATED
 

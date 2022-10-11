@@ -19,8 +19,10 @@ def test_get_recipes_success(recipe_factory: RecipeFactory, api_user_client: API
         recipe_factory: recipe factory
         api_user_client: django rest framework api client
     """
+    _, api_client = api_user_client
     recipe_factory.create_batch(size=TOTAL_RECIPES_NUMBER)
-    response = api_user_client.get(GET_RECIPE_LIST_URL)
+
+    response = api_client.get(GET_RECIPE_LIST_URL)
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json()['count'] == TOTAL_RECIPES_NUMBER

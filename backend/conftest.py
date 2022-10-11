@@ -27,8 +27,8 @@ def user(user_factory):
 
 
 @pytest.fixture
-def api_user_client(api_client: APIClient, user: CustomUser) -> APIClient:  # noqa: WPS442
+def api_user_client(api_client: APIClient, user: CustomUser) -> tuple[CustomUser, APIClient]:  # noqa: WPS442
     """Drf api client with user token auth."""
     token = Token.objects.create(user=user)
     api_client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
-    return api_client
+    return user, api_client

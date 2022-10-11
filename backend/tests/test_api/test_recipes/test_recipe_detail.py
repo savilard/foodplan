@@ -24,8 +24,9 @@ def test_retrieve_recipe_success(recipe_factory: RecipeFactory, api_user_client:
         api_user_client: django rest framework api client.
     """
     recipe = recipe_factory.create()
+    _, api_client = api_user_client
 
-    response = api_user_client.get(get_recipe_detail_url(recipe_id=recipe.id))
+    response = api_client.get(get_recipe_detail_url(recipe_id=recipe.id))
 
     assert response.status_code == status.HTTP_200_OK
     assert UUID(response.json()['id']) == recipe.id
