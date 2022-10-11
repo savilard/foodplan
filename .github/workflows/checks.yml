@@ -21,7 +21,7 @@ jobs:
         run: docker-compose run --rm backend sh -c "flake8"
 
       - name: Pytest
-        run: docker-compose run --rm backend sh -c "python manage.py wait_for_db && pytest"
+        run: docker-compose run --user=root --rm backend sh -c "python manage.py wait_for_db && pytest"
 
       - name: Upload coverage reports to Codecov with GitHub Action
         uses: codecov/codecov-action@v3
