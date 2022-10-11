@@ -121,11 +121,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         recipe = get_object_or_404(Recipe, id=pk)
 
         cart = get_shopping_cart_for(current_user=user)
-        if not cart:
-            return Response(
-                {'errors': 'Failed to create or retrieve a shopping list'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
 
         if recipe.id in cart.recipes.values_list('id', flat=True):
             return Response(
@@ -151,11 +146,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         user = request.user
         recipe = get_object_or_404(Recipe, id=pk)
         cart = get_shopping_cart_for(current_user=user)
-        if not cart:
-            return Response(
-                {'errors': 'Failed to create or retrieve a shopping cart'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
 
         if recipe.id not in cart.recipes.values_list('id', flat=True):
             return Response(
