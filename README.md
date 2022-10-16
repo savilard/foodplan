@@ -8,8 +8,6 @@
   <img alt="Codeclimate" src="https://img.shields.io/codeclimate/maintainability/savilard/foodplan?style=for-the-badge">
   <img alt="GitHub Actions" src="https://img.shields.io/github/workflow/status/savilard/foodplan/Checks?style=for-the-badge">
   <img alt="Codecov" src="https://img.shields.io/codecov/c/github/savilard/foodplan?style=for-the-badge">
-  <img alt="Platform" src="https://img.shields.io/badge/platform-linux-green?style=for-the-badge" />
-  <img alt="Python version" src="https://img.shields.io/badge/python-3.9-green?style=for-the-badge" />
   <a href="https://github.com/wemake-services/wemake-python-styleguide"><img src="https://img.shields.io/badge/style-wemake-blue?style=for-the-badge" alt="Code style"></a>
 </p>
 
