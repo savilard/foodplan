@@ -1,4 +1,4 @@
-ARG PYTHON_VERSION=3.9.13
+ARG PYTHON_VERSION=3.10.8
 ARG APP_ENV=prod
 
 FROM python:${PYTHON_VERSION}-bullseye AS base-builder
