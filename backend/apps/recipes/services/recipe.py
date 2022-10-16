@@ -12,7 +12,7 @@ from apps.users.models import CustomUser
 class RecipeService(object):
     """Service for creating recipe."""
 
-    def __init__(self, author: typing.Union[CustomUser, typing.Any], validated_data) -> None:
+    def __init__(self, author: CustomUser | typing.Any, validated_data) -> None:
         """Init for RecipeService.
 
         Args:

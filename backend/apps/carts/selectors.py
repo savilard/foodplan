@@ -1,12 +1,10 @@
-import typing
-
 from django.contrib.auth.models import AnonymousUser
 
 from apps.carts.models import Cart
 from apps.users.models import CustomUser
 
 
-def get_shopping_cart_for(current_user: typing.Union[CustomUser, AnonymousUser]) -> Cart:
+def get_shopping_cart_for(current_user: CustomUser | AnonymousUser) -> Cart:
     """Return shopping for current user.
 
     Args:

@@ -1,5 +1,3 @@
-import typing
-
 from django.http import HttpRequest
 from django.http import HttpResponse
 
@@ -25,7 +23,7 @@ class UserViewSet(DjoserUserViewSet):
     pagination_class = LimitPageNumberPagination
 
     @action(methods=['post'], detail=True, permission_classes=(IsAuthenticated,))
-    def subscribe(self, request: HttpRequest, id: typing.Optional[str] = None) -> HttpResponse:  # noqa: WPS125
+    def subscribe(self, request: HttpRequest, id: str | None = None) -> HttpResponse:  # noqa: WPS125
         """Allows an authorized user to subscribe to the author of a recipe.
 
         Args:
@@ -55,7 +53,7 @@ class UserViewSet(DjoserUserViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @subscribe.mapping.delete
-    def unsubscribe(self, request: HttpRequest, id: typing.Optional[str] = None) -> HttpResponse:  # noqa: WPS125
+    def unsubscribe(self, request: HttpRequest, id: str | None = None) -> HttpResponse:  # noqa: WPS125
         """Allows an authorized user to unsubscribe to the author of a recipe.
 
         Args:

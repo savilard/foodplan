@@ -30,10 +30,7 @@ def get_user_by(user_id: typing.Optional[str]) -> CustomUser:
     return get_object_or_404(CustomUser, id=user_id)
 
 
-def is_user_subscribed_to_author(
-    user: typing.Union[CustomUser, AnonymousUser],
-    author: CustomUser,
-) -> typing.Optional[bool]:
+def is_user_subscribed_to_author(user: CustomUser | AnonymousUser, author: CustomUser) -> bool | None:
     """Checks if the user is subscribed to the specified author of the recipe.
 
     Args:

@@ -59,7 +59,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
 
     @action(methods=['post'], detail=True, permission_classes=(IsAuthenticated,))
-    def favorite(self, request: Request, pk: typing.Optional[str] = None) -> Response:  # noqa: WPS125
+    def favorite(self, request: Request, pk: str | None = None) -> Response:  # noqa: WPS125
         """Add recipe to favorites.
 
         Args:
@@ -81,8 +81,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
 
     @favorite.mapping.delete
-    def remove_recipe_from_favorite(self, request: Request,
-                                    pk: typing.Optional[str] = None) -> Response:  # noqa: WPS125
+    def remove_recipe_from_favorite(self, request: Request, pk: str | None = None) -> Response:  # noqa: WPS125
         """Remove recipe from favorites.
 
         Args:
@@ -103,7 +102,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=['post'], detail=True, permission_classes=(IsAuthenticated,))
-    def shopping_cart(self, request: Request, pk: typing.Optional[str] = None) -> Response:  # noqa: WPS125
+    def shopping_cart(self, request: Request, pk: str | None = None) -> Response:  # noqa: WPS125
         """Add recipe to shopping cart.
 
         Args:
@@ -129,7 +128,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
 
     @shopping_cart.mapping.delete
-    def remove_recipe_from_shopping_cart(self, request: Request, pk: typing.Optional[str] = None) -> Response:  # noqa: WPS125
+    def remove_recipe_from_shopping_cart(self, request: Request, pk: str | None = None) -> Response:  # noqa: WPS125
         """Remove recipe from shopping cart.
 
         Args:

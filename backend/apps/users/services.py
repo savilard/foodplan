@@ -1,5 +1,3 @@
-import typing
-
 from django.contrib.auth.models import AnonymousUser
 
 from apps.users.models import CustomUser
@@ -8,7 +6,7 @@ from apps.users.models import CustomUser
 class UserService(object):
     """Service for project user."""
 
-    def __init__(self, user: typing.Union[CustomUser, AnonymousUser], author: CustomUser) -> None:
+    def __init__(self, user: CustomUser | AnonymousUser, author: CustomUser) -> None:
         """Init for UserService.
 
         Args:
