@@ -13,7 +13,7 @@ def test_create_favorites(favorites_factory: FavoritesFactory) -> None:
     """Test favorites create."""
     favorites = favorites_factory.create()
 
-    assert str(favorites.user.username) == favorites.user.username
+    assert str(favorites) == '{0}: {1}'.format(favorites.user.full_name, favorites.recipe.name)
 
 
 def test_user_recipe_unique_together(

@@ -114,3 +114,20 @@ def test_remove_non_existent_recipe_to_shopping_cart_error(api_user_client: APIC
     response = api_client.delete(get_add_recipe_to_cart_url(recipe_id=non_existent_recipe_id))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+def test_remove_recipe_from_favorites_error(
+    api_user_client: APIClient,
+    recipe_factory: RecipeFactory,
+) -> None:
+    """Test removing non-existent recipe from shopping cart.
+
+    Args:
+        api_user_client: django rest framework api client.
+    """
+    _, api_client = api_user_client
+    recipe = recipe_factory.create()
+
+    response = api_client.delete(get_add_recipe_to_cart_url(recipe_id=recipe.id))
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST

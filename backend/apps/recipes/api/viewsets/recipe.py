@@ -98,14 +98,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        is_deleted, _ = favorites.delete()
-        if not is_deleted:
-            return Response(
-                {
-                    'errors': 'The recipe was not in the favorites.',
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        favorites.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
