@@ -121,8 +121,8 @@ def test_get_user_subscriptions_successful(
 ) -> None:
     user, api_client = api_user_client
 
-    recipe_authors = user_factory.create()
-    user.follow_by.add(recipe_authors)
+    recipe_author = user_factory.create()
+    user.follow_by.add(recipe_author)
 
     response = api_client.get(get_user_subscriptions_url())
 
