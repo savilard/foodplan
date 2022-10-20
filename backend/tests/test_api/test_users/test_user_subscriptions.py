@@ -16,10 +16,9 @@ def get_user_subscription_url_to(recipe_author_id: str) -> str:
 
 def test_subscribe_auth_user_to_recipe_author_successful(
     user_factory: UserFactory,
-    user: CustomUser,
     api_user_client: tuple[CustomUser, APIClient],
 ) -> None:
-    _, api_client = api_user_client
+    user, api_client = api_user_client
 
     recipe_author = user_factory.create()
 
@@ -33,8 +32,8 @@ def test_subscribe_auth_user_to_recipe_author_successful(
     assert user.follow_by.filter(id=recipe_author.id).exists()
 
 
-def test_user_self_subscription_error(user: CustomUser, api_user_client: tuple[CustomUser, APIClient]) -> None:
-    _, api_client = api_user_client
+def test_user_self_subscription_error(api_user_client: tuple[CustomUser, APIClient]) -> None:
+    user, api_client = api_user_client
 
     response = api_client.post(
         get_user_subscription_url_to(user.id),
@@ -48,10 +47,9 @@ def test_user_self_subscription_error(user: CustomUser, api_user_client: tuple[C
 
 def test_user_already_subscription_to_recipe_author_error(
     user_factory: UserFactory,
-    user: CustomUser,
     api_user_client: tuple[CustomUser, APIClient],
 ) -> None:
-    _, api_client = api_user_client
+    user, api_client = api_user_client
 
     recipe_author = user_factory.create()
     user.follow_by.add(recipe_author)
