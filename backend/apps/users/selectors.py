@@ -8,9 +8,7 @@ from rest_framework.generics import get_object_or_404
 from apps.users.models import CustomUser
 
 
-def get_user_followers(
-    user: typing.Union[CustomUser, AnonymousUser],
-) -> typing.Optional['QuerySet[CustomUser]']:
+def get_user_followers(user: CustomUser | AnonymousUser) -> typing.Optional['QuerySet[CustomUser]']:
     """Get auth user followers.
 
     Args:
@@ -21,7 +19,7 @@ def get_user_followers(
     return user.follow_by.all()
 
 
-def get_user_by(user_id: typing.Optional[str]) -> CustomUser:
+def get_user_by(user_id: str | None) -> CustomUser:
     """Get user by id.
 
     Args:
