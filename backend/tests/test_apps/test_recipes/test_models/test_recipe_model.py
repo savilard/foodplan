@@ -13,3 +13,4 @@ def test_create_recipe_successful(recipe_factory: RecipeFactory, user_factory: U
     assert recipe.author.id == author.id
     assert len(recipe.ingredients.all()) > 0
     assert len(recipe.tags.all()) > 0
+    assert str(recipe) == recipe.name

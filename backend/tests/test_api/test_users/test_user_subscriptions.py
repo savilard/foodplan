@@ -14,6 +14,10 @@ def get_user_subscription_url_to(recipe_author_id: str) -> str:
     return reverse('api:users-subscribe', args=[recipe_author_id])
 
 
+def get_user_subscriptions_url():
+    return reverse('api:users-subscriptions')
+
+
 def test_subscribe_auth_user_to_recipe_author_successful(
     user_factory: UserFactory,
     api_user_client: tuple[CustomUser, APIClient],
@@ -97,3 +101,29 @@ def test_unsubscribe_non_auth_user_from_recipe_author_error(
     )
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_user_self_unsubscription_error(api_user_client: tuple[CustomUser, APIClient]) -> None:
+    user, api_client = api_user_client
+
+    response = api_client.delete(
+        get_user_subscription_url_to(user.id),
+        user.id,
+        format='json',
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+def test_get_user_subscriptions_successful(
+    api_user_client: tuple[CustomUser, APIClient],
+    user_factory: UserFactory,
+) -> None:
+    user, api_client = api_user_client
+
+    recipe_authors = user_factory.create()
+    user.follow_by.add(recipe_authors)
+
+    response = api_client.get(get_user_subscriptions_url())
+
+    assert response.status_code == status.HTTP_200_OK

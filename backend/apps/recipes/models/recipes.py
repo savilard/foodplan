@@ -53,7 +53,7 @@ class Recipe(BaseModel):
         ordering = ('-created',)
 
     def __str__(self) -> str:
-        return f'{self.name}'.strip()
+        return str(self.name).strip()
 
 
 class RecipeIngredient(BaseModel):
