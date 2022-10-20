@@ -64,3 +64,38 @@ def test_user_already_subscription_to_recipe_author_error(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data['errors'] == 'You are already subscribed to this user'
+
+
+def test_unsubscribe_auth_user_from_recipe_author_successful(
+    user_factory: UserFactory,
+    api_user_client: tuple[CustomUser, APIClient],
+) -> None:
+    user, api_client = api_user_client
+
+    recipe_author = user_factory.create()
+    user.follow_by.add(recipe_author)
+
+    response = api_client.delete(
+        get_user_subscription_url_to(recipe_author.id),
+        recipe_author.id,
+        format='json',
+    )
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+
+
+def test_unsubscribe_non_auth_user_from_recipe_author_error(
+    user_factory: UserFactory,
+    user: CustomUser,
+    api_client: APIClient,
+) -> None:
+    recipe_author = user_factory.create()
+    user.follow_by.add(recipe_author)
+
+    response = api_client.delete(
+        get_user_subscription_url_to(recipe_author.id),
+        recipe_author.id,
+        format='json',
+    )
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
