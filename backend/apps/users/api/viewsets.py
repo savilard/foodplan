@@ -74,6 +74,11 @@ class UserViewSet(DjoserUserViewSet):
             service.remove_follower()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
+        return Response(
+            {'errors': 'Вы Уже отписались от автора'},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
     @action(methods=['get'], detail=False, permission_classes=(IsAuthenticated,))
     def subscriptions(self, request: HttpRequest) -> HttpResponse:
         """Get users that the current user is subscribed to.
