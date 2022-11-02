@@ -17,7 +17,7 @@ The "Shopping List" service will allow users to create a list of products that n
 ---
 
 <!-- TOC -->
-  * [Stack project](#stack-project)
+  * [Features](#features)
   * [Preparatory works](#preparatory-works)
   * [Installation](#installation)
   * [How to configure the dev version of the site](#how-to-configure-the-dev-version-of-the-site)
@@ -29,7 +29,7 @@ The "Shopping List" service will allow users to create a list of products that n
 <!-- TOC -->
 
 
-## Stack project
+## Features
 
 * `Django`
 * `Python`
